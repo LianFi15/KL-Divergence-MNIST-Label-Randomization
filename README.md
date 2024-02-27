@@ -26,15 +26,30 @@ MNIST (Modified National Institute of Standards and Technology) is a widely used
 
 ### Loss Function
 
-The cross-entropy loss function measures the dissimilarity between the true labels $y$ and the predicted probabilities $\hat {y}$ in a classification task. For each sample in a batch, it sums the negative logarithm of the predicted probability assigned to the correct class. The overall loss is the average across all samples in the batch. This function penalizes the model more when its predictions deviate from the true labels, encouraging accurate classification.
+#### Softmax Cross Entropy
 
-$$L(y, \hat {y})$ = -\frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{C} y_{i,j} \log(\hat{y}_{i,j})$$
+The softmax cross-entropy loss function is commonly employed to measure the dissimilarity between the true labels $\(y\)$ and the predicted probabilities $\(\hat{y}\)$ in a classification task. Unlike regular cross-entropy, softmax cross-entropy includes a softmax activation function, which is applied to the model's raw output to obtain probability distributions over the classes. The softmax function ensures that the predicted probabilities sum to 1, making them interpretable as class probabilities.
+
+In PyTorch's `torch.nn` library, the cross-entropy loss is often implemented with softmax. Specifically, the `torch.nn.CrossEntropyLoss` automatically incorporates the softmax function into its computation. This means that when using this loss function, there is no need to explicitly apply a softmax activation to the model's output before calculating the loss.
+
+For each sample in a batch, softmax cross-entropy sums the negative logarithm of the predicted probability assigned to the correct class. The overall loss is then computed as the average across all samples in the batch. This formulation effectively penalizes the model more when its predictions deviate from the true labels, thereby encouraging accurate classification.
+
+The softmax cross-entropy loss formula is given by:
+
+$L(y, \hat {y}) = { -\frac{1}{N} \sum\limits_{i=1}^{N} \sum\limits_{j=1}^{C} y_{i,j} \log(\frac{ e^ {\hat{y_{i,j}}}} {\sum\limits_{k=1}^{C} e^{\hat{y_{i,k}}} }) }$
+
+Where,
+
+- $N {\text{ :The number of elements in the input or the batch size}}$
+- $C {\text{ :The number of classes}}$
+- $y_{i,j} {\text{ :The true output for the i-th sample and j-th class}}$
+- $\hat{y_{i,j}} {\text{ :The predicted output for the i-th sample and j-th class}}$
 
 ### Optimization Step
 
 ADAM (Adaptive Moment Estimation) is a popular optimization algorithm for training deep neural networks. It combines momentum and RMSprop, adapting learning rates for each parameter. Efficient and effective, it mitigates issues like vanishing/exploding gradients, contributing to improved training in deep learning tasks.
 
-$$\theta_{t+1} = \theta_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_t $$
+$\theta_{t+1} = \theta_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \cdot \hat{m}_t $
 
 Where,
 
@@ -49,7 +64,8 @@ Where,
 
 The Kullback-Leibler (KL) divergence between two probability distributions $P$ and $Q$ is given by:
 
-$$ \ D_{\text{KL}}(P || Q) = \sum_{i} P(i) \log\left(\frac{P(i)}{Q(i)}\right) \ $$
+$\ D_{\text{KL}}(P || Q) = { \sum\limits_{i} P(i) \log(\frac {P(i)}{Q(i)} ) = E_p (\log\frac {P(i)}{Q(i)}}$
+
 
 Explanation:
 - $D_{\text{KL}}(P || Q)$: KL divergence from distribution $P$ to $Q$.
